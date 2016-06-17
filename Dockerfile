@@ -11,6 +11,12 @@ ADD docker_files/namenode-run.sh /apps/namenode-run.sh
 ADD docker_files/hdfs.format /etc/hadoop/hdfs.format
 RUN chmod a+x /apps/namenode-run.sh
 
+# declare the volumes
+RUN mkdir /etc/hadoop/conf.bb && \
+    update-alternatives --install /etc/hadoop/conf hadoop-conf /etc/hadoop/conf.bb 1 && \
+    update-alternatives --set hadoop-conf /etc/hadoop/conf.bb
+VOLUME /etc/hadoop/conf.bb
+
 # external ports
 EXPOSE 50070 50470 
 
