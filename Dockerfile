@@ -1,11 +1,14 @@
 # Pull base image.
-#FROM bigboards/cdh-base-__arch__
-FROM bigboards/cdh-base-x86_64
+FROM bigboards/cdh-base-__arch__
 
 MAINTAINER bigboards
 USER root 
 
-RUN apt-get update && apt-get install -y hadoop-hdfs-namenode 
+RUN apt-get update \
+    && apt-get install -y hadoop-hdfs-namenode \
+    && apt-get clean \
+    && apt-get autoclean \
+    && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archives/*
 
 ADD docker_files/namenode-run.sh /apps/namenode-run.sh
 ADD docker_files/hdfs.format /etc/hadoop/hdfs.format
