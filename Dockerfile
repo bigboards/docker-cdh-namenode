@@ -5,7 +5,7 @@ MAINTAINER bigboards
 USER root 
 
 RUN apt-get update \
-    && apt-get install -y hadoop-hdfs-namenode \
+    && apt-get install -y libxml-xpath-perl hadoop-hdfs-namenode \
     && apt-get clean \
     && apt-get autoclean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /var/cache/apt/archives/*

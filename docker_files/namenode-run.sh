@@ -4,8 +4,9 @@ DAEMON=$1
 
 if [ -e "$HDFS_FORMAT_MARKER" ]; then
     echo "Found the HDFS format marker. Formatting hdfs before starting";
-    
-    mkdir -p /data/dfs/nn
+
+    set HDFS_PATH_NN="$(xpath /etc/hadoop/conf/hdfs-site.xml '/configuration/property[name="dfs.namenode.name.dir"]/value/text()')"
+    mkdir -p $HDFS_PATH_NN
 
     /usr/bin/hadoop --config /etc/hadoop/conf namenode -format -force -nonInteractive
 
