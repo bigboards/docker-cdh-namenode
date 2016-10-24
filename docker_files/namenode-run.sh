@@ -1,17 +1,28 @@
 #!/bin/bash
+
+FILE_PREFIX="file://"
 HDFS_FORMAT_MARKER="/etc/hadoop/hdfs.format"
+
+HDFS_PATH_NN="$(xpath /etc/hadoop/conf/hdfs-site.xml '/configuration/property[name="dfs.namenode.name.dir"]/value/text()')#'file://'"
+HDFS_PATH_NN="${HDFS_PATH_NN#$FILE_PREFIX}"
+
+HDFS_FORMATTED_MARKER=$HDFS_PATH_NN + "/current/VERSION"
+
 DAEMON=$1
 
 if [ -e "$HDFS_FORMAT_MARKER" ]; then
-    echo "Found the HDFS format marker. Formatting hdfs before starting";
+    echo "Found the HDFS format marker ... check formatted or not ...";
 
-    set HDFS_PATH_NN="$(xpath /etc/hadoop/conf/hdfs-site.xml '/configuration/property[name="dfs.namenode.name.dir"]/value/text()')"
-    mkdir -p $HDFS_PATH_NN
+    if ! [ -e "$HDFS_FORMATTED_MARKER" ]; then
+        echo "Did not find the VERSION formatted marker. Formatting hdfs before starting";
 
-    /usr/bin/hadoop --config /etc/hadoop/conf namenode -format -force -nonInteractive
+        mkdir -p $HDFS_PATH_NN
 
-    if [ $? -eq 0 ]; then
-        rm -rf "$HDFS_FORMAT_MARKER"
+        /usr/bin/hadoop --config /etc/hadoop/conf namenode -format -force -nonInteractive
+
+        if [ $? -eq 0 ]; then
+            rm -rf "$HDFS_FORMAT_MARKER"
+        fi
     fi
 fi
 
