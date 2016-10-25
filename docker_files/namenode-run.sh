@@ -3,10 +3,10 @@
 FILE_PREFIX="file://"
 HDFS_FORMAT_MARKER="/etc/hadoop/hdfs.format"
 
-HDFS_PATH_NN="$(xpath /etc/hadoop/conf/hdfs-site.xml '/configuration/property[name="dfs.namenode.name.dir"]/value/text()')#'file://'"
+HDFS_PATH_NN="$(xpath -q  -e '/configuration/property[name="dfs.namenode.name.dir"]/value/text()' '/etc/hadoop/conf/hdfs-site.xml')"
 HDFS_PATH_NN="${HDFS_PATH_NN#$FILE_PREFIX}"
 
-HDFS_FORMATTED_MARKER=$HDFS_PATH_NN + "/current/VERSION"
+HDFS_FORMATTED_MARKER=$HDFS_PATH_NN"/current/VERSION"
 
 DAEMON=$1
 
