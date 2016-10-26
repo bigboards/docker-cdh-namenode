@@ -13,7 +13,7 @@ DAEMON=$1
 if [ -e "$HDFS_FORMAT_MARKER" ]; then
     echo "Found the HDFS format marker ... check formatted or not ...";
 
-    if ! [ -e "$HDFS_FORMATTED_MARKER" ]; then
+    if [ ! -f "$HDFS_FORMATTED_MARKER" ]; then
         echo "Did not find the VERSION formatted marker. Formatting hdfs before starting";
 
         mkdir -p $HDFS_PATH_NN
@@ -23,6 +23,8 @@ if [ -e "$HDFS_FORMAT_MARKER" ]; then
         if [ $? -eq 0 ]; then
             rm -rf "$HDFS_FORMAT_MARKER"
         fi
+    else
+        rm -rf "$HDFS_FORMAT_MARKER"
     fi
 fi
 
